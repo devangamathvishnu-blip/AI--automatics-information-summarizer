@@ -1,0 +1,293 @@
+{
+  "name": "My workflow 18624",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -480,
+        -176
+      ],
+      "id": "55157732-2ba0-4402-a446-2e42095b9021",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "http://www.marketingaiinstitute.com/blog/rss.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -256,
+        -368
+      ],
+      "id": "0fad171e-3733-45d3-80d0-82c9c5c592dc",
+      "name": "AI News fees"
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -176
+      ],
+      "id": "e6335f24-dd27-4e07-9434-a145718868c9",
+      "name": "Data Aggregator"
+    },
+    {
+      "parameters": {
+        "sendTo": "studywithmind2024@gmail.com\n",
+        "subject": "Today's News information for you...",
+        "emailType": "text",
+        "message": "={{ $json.text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        768,
+        -176
+      ],
+      "id": "dc0de665-2a48-4b1d-b287-a38263a61ddf",
+      "name": "Send a message",
+      "webhookId": "4d0adf81-0a52-4bd7-af47-8632588506fd",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "AhG8jigJ9nYWaV1k",
+          "name": "Gmail account 3275"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are an AI newsletter assistant creating a daily intelligence report from multiple categories.\nUse only the provided items. Do not invent content.\nOrganize the provided items by category and Format exactly like this:\n\nHi there,\nHere's your Tech Brief:\n\nAI NEWS HIGHLIGHTS\n======================\n[5 most important AI developments]\nFor each AI-related item, output:\nHEADLINE IN ALL CAPS\nSummary in 1–2 sentences.\nLink: <paste link>\n\nTECHNOLOGY UPDATES\n======================\n[Latest broader technology-related developments from major tech sources]\nFor each broader technology-related item, output:\nHEADLINE IN ALL CAPS\nSummary in 1–2 sentences.\nLink: <paste link>\n\nUPCOMING AI EVENTS\n======================\n[List events with date, location, description]\nIf no events found: \"No AI events scheduled this week\"\n\nFor each Event Item\nHEADLINE IN ALL CAPS\nSummary in 1–2 sentences.\nLink: <paste link>\n\nKeep the summaries professional, concise, and easy to read.\n\nSign off as \"Your AI Intelligence Team\""
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        416,
+        -176
+      ],
+      "id": "297cfe6d-6a76-4c5f-b3de-73d022b5d3c1",
+      "name": "AI News summarizer"
+    },
+    {
+      "parameters": {
+        "url": "http://bair.berkeley.edu/blog/feed.xml",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        -256,
+        -176
+      ],
+      "id": "c0c08b4d-b9ae-4ab3-b408-cecc1a669251",
+      "name": "Neural Network"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -32,
+        -192
+      ],
+      "id": "458e60f2-52aa-40e2-85fe-0f7ce13c401c",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "url": "https://www.searchapi.io/api/v1/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google_events"
+            },
+            {
+              "name": "q",
+              "value": "Tech Events in San Francisco"
+            },
+            {
+              "name": "api_key",
+              "value": "iCsmZt9HcfW7DEPvUDtH1uqj"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -256,
+        16
+      ],
+      "id": "bcf6752a-25ee-4bf6-88ff-bb5416fe1db6",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        496,
+        48
+      ],
+      "id": "cd5f6ccb-a436-411c-ab55-ce7c39c0d814",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yiuwP2Eq6qWDC94a",
+          "name": "Google Gemini(PaLM) Api account 11939"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI News fees",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Neural Network",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI News fees": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Aggregator": {
+      "main": [
+        [
+          {
+            "node": "AI News summarizer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI News summarizer": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Neural Network": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Data Aggregator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        []
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI News summarizer",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "18258a6e-cfa2-4113-9e76-d6060321a91d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "969257b09ad2942bbaff2e2288304f4969030574d109cdeca05bf11f630884df"
+  },
+  "id": "xf4H6JRqHdG4lqP0",
+  "tags": []
+}
